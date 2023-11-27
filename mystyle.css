@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.margin-0{
+    margin:0px
+}
+
+img{
+    width: 20vw;
+    height: 25vh;
+}
+
+.qty-input{
+    width: 30px;
+}
+
+.products-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.header-div {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin:0px
+}
+
+.link-head{
+    padding: 5px;
+}
+
+nav {
+    background-color: blanchedalmond;
+    color: purple;
+    padding: 10px;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 30px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+}
+
+.main-content {
+    flex: 5;
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 20px;
+    min-height: 60vh;
+}
+
+.main-content-index {
+    flex: 5;
+    background-color: #f1f1f1;
+    text-align: center;
+}
+
+.side-content {
+    flex: 2;
+    background-color: #ddd;
+    clear:left;
+    padding: 20px;
+}
+
+.footer-div {
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+.homepage{
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 700;
+    text-shadow: papayawhip;
+}
+
+.bread-img{
+    opacity: 0.5;
+    vertical-align: middle;
+    horizontal-align: middle;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.chicken-img{
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    float: right;
+}
+
+.visibility{
+    visibility: hidden;
+}
+
+.home-back{
+    background-image: url('nile.jpg');
+    background-repeat: round;
+    width: 980px;
+    height: 465px;
+}
+
+.table-prop{
+    border-width: 5px;
+    border-color: red;
+    border-style: dotted;
+    display: flex;
+}
+
+.heading-table{
+    display: flex;
+    position: relative;
+}
+
+.margin-2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.padding-left{
+    padding-right: 60px;
+    padding-left: 60px;
+}
+
+.padding-top-5{
+    margin-top: 25px;
+}
+
+.my-link {
+    color: blue;
+    text-decoration: none;
+  
+  }
+  .my-link:visited {
+    color: green;
+  }
+  
+  .my-link:hover {
+    color: black;
+  }
+  
+  .my-link:active {
+    color: red;
+    text-decoration: none;
+  }
+  
+.e-commerce{
+    margin:0px;
+    margin-bottom: 10px;
+}
+
+.float-left{
+    float: left;
+}
+
+.width-900{
+    width: 900px;
+}
+
+.text-shade{
+    text-shadow: 2px 2px #FF0000;
+}
+
+.table-padding{
+    padding: 0 55px;
+}

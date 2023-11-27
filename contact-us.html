@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="mystyle.css">
+    <script>
+        function validateForm() {
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            var email = document.getElementById("email").value;
+            var gender = document.querySelector('input[name="gender"]:checked');
+            var comment = document.getElementById("comment").value;
+
+            var namePattern = /^[A-Z][a-zA-Z\s]+$/;
+            var phonePattern = /^\(\d{3}\)\s\d{3}-\d{4}$/;
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!namePattern.test(firstName)) {
+                alert("Please enter a valid first name.");
+                return false;
+            }
+
+            if (!namePattern.test(lastName)) {
+                alert("Please enter a valid last name.");
+                return false;
+            }
+
+            if (firstName.toLowerCase() === lastName.toLowerCase()) {
+                alert("First name and last name cannot be the same.");
+                return false;
+            }
+
+            if (!phonePattern.test(phoneNumber)) {
+                alert("Please enter a valid phone number in the format (123) 456-7890.");
+                return false;
+            }
+
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            if (gender == null) {
+                alert("Please select a gender.");
+                return false;
+            }
+
+            if (comment.length < 10) {
+                alert("Please enter a comment with at least 10 characters.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function displayCurrentDateTime() {
+            var now = new Date();
+            var date = now.toLocaleDateString();
+            var time = now.toLocaleTimeString();
+            
+            var dateTimeString = date + " " + time;
+            
+            document.getElementById("datetime").innerHTML = dateTimeString;
+        }
+
+        window.onload = displayCurrentDateTime;
+    
+    </script>
+</head>
+<body>
+    <div class="margin-0">
+        <div class="header-div">Nile
+            <div style="margin: auto;">
+            </div>
+        </div>
+    </div>
+    <form id="search-form" style="display: none;">
+        <input type="text" id="search-input" placeholder="Search products">
+        <button type="submit">Search</button>
+    </form>
+    <nav>
+        <ul class="link-head">
+            <li><a class="my-link" href="./index.html">Home</a></li>
+            <li><a class="my-link" href="./cart.html">Cart</a></li>
+            <li><a class="my-link" href="./freshProducts.html">Fresh products</a></li>
+            <li><a class="my-link" href="./frozen.html">Frozen</a></li>
+            <li><a class="my-link" href="./pantry.html">Pantry</a></li>
+            <li><a class="my-link" href="./breakfast.html">Breakfast and Cereal</a></li>
+            <li><a class="my-link" href="./baking.html">Baking</a></li>
+            <li><a class="my-link" href="./snacks.html">Snacks</a></li>
+            <li><a class="my-link" href="./candy.html">Candy</a></li>
+            <li><a class="my-link" href="./speciality.html">Specialty shops</a></li>
+            <li><a class="my-link" href="./deals.html">Deals</a></li>
+            <li><a class="my-link" href="./my-account.html">My-account</a></li>
+            <li><a class="my-link" href="./about-us.html">About-us</a></li>
+            <li><a class="my-link" href="./contact-us.html">Contact-us</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="side-content">
+            <div id="time"></div>
+            <h2>Our Braches</h2>
+            <ol>
+                <li>New York</li>
+                <li>Dallas</li>
+            </ol>
+
+            <div>
+                <h2 class="margin-2">Cart</h2>
+                <div id="cart-products" class="cart-products">
+
+                </div>
+                <div class="cartButtons">
+                    <button id="remove" onc>Empty Cart</button>
+                    <button id="buy">Buy Cart</button>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <h2>Contact Us</h2>
+            <form onsubmit="return validateForm()">
+                First Name: <input type="text" id="firstName" name="firstName"><br><br>
+                Last Name: <input type="text" id="lastName" name="lastName"><br><br>
+                Phone Number: <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
+                Email Address: <input type="text" id="email" name="email"><br><br>
+                Gender:
+                <input type="radio" name="gender" value="male"> Male
+                <input type="radio" name="gender" value="female"> Female<br><br>
+                Comment: <textarea id="comment" name="comment"></textarea><br><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+    <div class="footer-div">
+        <p>Nile</p>
+        <p>First Name: Venkata Sri Harsha</p>
+        <p>Last Name: Maddirala</p>
+        <p>NetId: vxm220023</p>
+        <p>Course: CS 6314</p>
+        <p>section: 001</p>
+    </footer>
+</body>
+</html>

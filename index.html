@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="mainScript.js"></script>
+    <link rel="stylesheet" href="mystyle.css">
+</head>
+<body>
+    <div class="margin-0">
+        <h1 class="header-div">Nile</h1>
+    </div>
+    <nav>
+        <ul class="link-head">
+            <li><a class="my-link" href="./index.html">Home</a></li>
+            <li><a class="my-link" href="./cart.html">Cart</a></li>
+            <li><a class="my-link" href="./freshProducts.html">Fresh products</a></li>
+            <li><a class="my-link" href="./frozen.html">Frozen</a></li>
+            <li><a class="my-link" href="./pantry.html">Pantry</a></li>
+            <li><a class="my-link" href="./breakfast.html">Breakfast and Cereal</a></li>
+            <li><a class="my-link" href="./baking.html">Baking</a></li>
+            <li><a class="my-link" href="./snacks.html">Snacks</a></li>
+            <li><a class="my-link" href="./candy.html">Candy</a></li>
+            <li><a class="my-link" href="./speciality.html">Specialty shops</a></li>
+            <li><a class="my-link" href="./deals.html">Deals</a></li>
+            <li><a class="my-link" href="./my-account.html">My-account</a></li>
+            <li><a class="my-link" href="./about-us.html">About-us</a></li>
+            <li><a class="my-link" href="./contact-us.html">Contact-us</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="side-content">
+            <div id="time"></div>
+            <h2>Our Benefits</h2>
+            <ol>
+                <li>Fast Shipping</li>
+                <li>Easy returns</li>
+                <li>Cheaper Price</li>
+            </ol>
+            
+            <div>
+                <h2 class="margin-2">Cart</h2>
+                <div id="time"></div>
+                <div id="cart-products" class="cart-products">
+
+                </div>
+                <div style="display: none;" class="cartButtons">
+                    <button id="remove" onc>Empty Cart</button>
+                    <button id="buy">Buy Cart</button>
+                </div>
+            </div>
+            <div style="display: none;" id="categories">
+                <input style="display: none;" id="type" value="pantryProducts">
+                <select id="categorySelector">
+                    <option value="all" selected>Shop All</option>
+                    <option value="canned vegetables">Canned Vegetables</option>
+                    <option value="canned goods">Canned Goods</option>
+                    <option value="condiments">Condiments</option>
+                    <option value="peanut butter">Peanut Butter</option>
+                    <option value="pasta">Pasta</option>
+                    <option value="rollbacks">Rollback</option>
+                </select>
+            </div>
+        </div>
+        <div class="main-content-index">
+            <div class="home-back">
+                <h2 class="e-commerce">A New E-commerce platform</h2>
+                <strong>Go through our products and make a purchase</strong>
+            </div>
+            <div style="display: none;" id="products-list" class="products-list">
+
+            </div>
+        </div>
+    </div>
+    <form id="search-form" style="display: none;">
+        <input type="text" id="search-input" placeholder="Search products">
+        <button type="submit">Search</button>
+    </form>
+    <div class="footer-div">
+        <p>Nile</p>
+        <p>First Name: Venkata Sri Harsha</p>
+        <p>Last Name: Maddirala</p>
+        <p>NetId: vxm220023</p>
+        <p>Course: CS 6314</p>
+        <p>section: 001</p>
+    </footer>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+const event = new Event("change");
+let elem = document.getElementById("categorySelector"); 
+elem.dispatchEvent(event);
+})
+</script>
+</html>
