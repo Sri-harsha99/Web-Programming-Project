@@ -406,6 +406,79 @@ searchForm.addEventListener("submit", function (e) {
 
     addProductsToPage(productList, filteredProducts);
 });
+
+
+function validateForm() {
+    
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    var dob = document.getElementById('dob').value;
+    var email = document.getElementById('email').value;
+    var address = document.getElementById('address').value;
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return false;
+    }
+
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters.");
+        return false;
+    }
+
+    var dobRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dob.match(dobRegex)) {
+        alert("Date of birth must be in MM/DD/YYYY format.");
+        return false;
+    }
+
+    var emailRegex = /\S+@\S+\.\S+/;
+    if (!email.match(emailRegex)) {
+        alert("Invalid email format.");
+        return false;
+    }
+
+    let object = {
+        username:username,
+        password:password,
+        firstName:firstName,
+        lastName:lastName,
+        dob:dob,
+        email:email,
+        address:address    
+    }
+
+    async function registerCustomer() {
+        try {
+            await $.ajax({
+                url: 'index.php',
+                type: 'post',
+                data: {action: 'registerCustomer', data: returnJSON(object)},
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function() {
+                    console.log('Error occurred');
+                }
+            });
+        } catch (error) {
+            console.log('Error occurred', error);
+        }
+    }
+
+    registerCustomer();
+}
+
+var registerButton = document.getElementById("register");
+
+if(registerButton){
+    registerButton.addEventListener("click", function (e) {
+        validateForm()
+    })
+}
 });
 
 function updateTime() {

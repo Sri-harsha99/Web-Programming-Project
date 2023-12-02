@@ -1,3 +1,32 @@
+<form id="registrationForm" action="/register" method="post" onsubmit="return validateForm()">
+    <label for="username">User Name:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required>
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required>
+
+    <label for="dob">Date of Birth (MM/DD/YYYY):</label>
+    <input type="text" id="dob" name="dob" placeholder="MM/DD/YYYY" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="address">Address:</label>
+    <textarea id="address" name="address" required></textarea>
+
+    <input type="submit" value="Register">
+</form>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,10 +35,8 @@
     <link rel="stylesheet" href="mystyle.css">
 </head>
 <body>
-    <div class="margin-0" >
-        <div class="centerDiv">Nile</div>
-        <div class="margin-right-1">Sign up</div>
-        <div>Log in</div>
+    <div class="margin-0">
+        <h1 class="header-div">Nile</h1>
     </div>
     <nav>
         <ul class="link-head">
@@ -33,7 +60,7 @@
         <div class="side-content">
             <div id="time"></div>
             <h2>Fresh Products</h2>
-            <div id="categories">
+            <div style="display: none;" id="categories">
                 <input style="display: none;" id="type" value="freshProducts">
                 <select id="categorySelector">
                     <option value="all" selected>Shop All</option>
@@ -60,9 +87,35 @@
             </div>
         </div>
         <div class="main-content">
-            <h2>Fresh Products</h2>
+            <h2>Register</h2>
             <div id="products-list" class="products-list">
-
+                <form id="registrationForm" action="/register" method="post" onsubmit="return validateForm()">
+                    <label for="username">User Name:</label>
+                    <input type="text" id="username" name="username" required>
+            
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+            
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+            
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+            
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+            
+                    <label for="dob">Date of Birth (MM/DD/YYYY):</label>
+                    <input type="text" id="dob" name="dob" placeholder="MM/DD/YYYY" required>
+            
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+            
+                    <label for="address">Address:</label>
+                    <textarea id="address" name="address" required></textarea>
+            
+                    <input type="submit" value="Register">
+                </form>
             </div>
         </div>
     </div>
