@@ -407,6 +407,39 @@ searchForm.addEventListener("submit", function (e) {
     addProductsToPage(productList, filteredProducts);
 });
 
+function loginForm() {
+    
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+
+    let object = {
+        username:username,
+        password:password
+    }
+
+
+    async function loginCustomer() {
+        try {
+            await $.ajax({
+                url: 'index.php',
+                type: 'post',
+                data: {action: 'loginCustomer', data: returnJSON(object)},
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function() {
+                    console.log('Error occurred');
+                }
+            });
+        } catch (error) {
+            console.log('Error occurred', error);
+        }
+    }
+
+    loginCustomer();
+
+}
+
 
 function validateForm() {
     
@@ -480,6 +513,8 @@ if(registerButton){
     })
 }
 });
+
+
 
 function updateTime() {
     const timeElement = document.getElementById("time");

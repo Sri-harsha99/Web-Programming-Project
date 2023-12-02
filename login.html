@@ -6,10 +6,8 @@
     <link rel="stylesheet" href="mystyle.css">
 </head>
 <body>
-    <div class="margin-0" >
-        <div class="centerDiv">Nile</div>
-        <div class="margin-right-1"><a class="my-link" href="./register.html">Sign up</a></div>
-        <div><a class="my-link" href="./login.html">Log in</a></div>
+    <div class="margin-0">
+        <h1 class="header-div">Nile</h1>
     </div>
     <nav>
         <ul class="link-head">
@@ -33,7 +31,7 @@
         <div class="side-content">
             <div id="time"></div>
             <h2>Fresh Products</h2>
-            <div id="categories">
+            <!-- <div style="display: none;" id="categories">
                 <input style="display: none;" id="type" value="freshProducts">
                 <select id="categorySelector">
                     <option value="all" selected>Shop All</option>
@@ -57,12 +55,20 @@
                     <button id="remove" onc>Empty Cart</button>
                     <button id="buy">Buy Cart</button>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="main-content">
-            <h2>Fresh Products</h2>
+            <h2>Login</h2>
             <div id="products-list" class="products-list">
-
+                <form id="registrationForm" action="/login" method="post" onsubmit="return loginForm()">
+                    <label for="username">User Name:</label>
+                    <input type="text" id="username" name="username" required><br><br>
+            
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br><br>
+            
+                    <input type="submit" value="Login"><br><br>
+                </form>
             </div>
         </div>
     </div>
