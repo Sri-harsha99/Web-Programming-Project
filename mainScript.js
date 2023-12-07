@@ -1048,7 +1048,7 @@ function filterTransactions() {
         var xhr = new XMLHttpRequest();
         formData = new FormData();
         formData.append("customerID",getCustomerID())
-        formData.append("month",yearFilter)
+        formData.append("year",yearFilter)
         
         xhr.open('POST', 'get_transactions_specific_year.php', true);
         xhr.onreadystatechange = function () {
@@ -1123,9 +1123,10 @@ function displayLowInventory() {
 }
 
 function date2Customers() {
-    date = document.getElementById('formDate2');
+    date = document.getElementById('formDate2').value;
 
     formData = new FormData()
+    formData.append('date',date);
     formData.append('date',date);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'get_customers_by_date.php', true);
@@ -1230,8 +1231,7 @@ async function modifyInventory(){
                         if(data.includes("Error")){
                             alert("Registration unsuccessful");
                         }else{
-                            transactions = JSON.parse(data)
-                            displayTransactions();
+                            alert("success")
                         }
                     } else {
                         console.error('An error occurred during the AJAX request.');

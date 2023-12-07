@@ -22,11 +22,12 @@ $dateObject = DateTime::createFromFormat('m/d/Y', $date);
 $formattedDate = $dateObject->format('Y-m-d');
 
 $query = "SELECT c.Customer_ID, c.First_Name, c.Last_Name
-          FROM Customers c
-          JOIN Transactions t ON c.Customer_ID = t.Customer_ID
-          WHERE t.Transaction_Date = ?
-          GROUP BY c.Customer_ID
-          HAVING COUNT(t.Transaction_ID) > 2";
+FROM Transactions t
+JOIN Carts ct ON ct.Transaction_ID = t.Transaction_ID
+JOIN Customers c ON c.Customer_ID = ct.Customer_ID
+WHERE t.Transaction_Date = ?
+GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
+HAVING COUNT(ct.Transaction_ID) > 2;";
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $formattedDate);
