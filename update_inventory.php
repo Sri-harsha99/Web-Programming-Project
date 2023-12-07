@@ -1,6 +1,12 @@
 <?php
 
-$conn = new mysqli('hostname', 'username', 'password', 'database');
+$hostname = '128.199.7.149';
+$username = 'root';
+$password = 'change-me';
+$database = 'nile';
+
+// Connect to the database
+$conn = new mysqli($hostname, $username, $password, $database);
 
 // Check for a successful connection
 if ($conn->connect_error) {

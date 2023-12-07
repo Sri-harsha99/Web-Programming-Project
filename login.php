@@ -18,7 +18,7 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 // Prepare the SQL statement for selecting user data
-$stmt = $conn->prepare("SELECT * FROM Users WHERE username=? AND password=?");
+$stmt = $conn->prepare("SELECT u.*, c.* FROM Users u INNER JOIN Customers c ON u.Customer_ID = c.Customer_ID WHERE u.username=? AND u.password=?");
 $stmt->bind_param("ss", $username, $password);
 $stmt->execute();
 $result = $stmt->get_result();
