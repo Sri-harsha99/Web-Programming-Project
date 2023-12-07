@@ -1,7 +1,11 @@
 <?php
-// Assume $conn is the connection to your database.
-// Also assume that you have a session started and the user's customer ID is stored in $_SESSION['customerID'].
-$conn = new mysqli('hostname', 'username', 'password', 'database');
+$hostname = '128.199.7.149';
+$username = 'root';
+$password = 'change-me';
+$database = 'nile';
+
+// Connect to the database
+$conn = new mysqli($hostname, $username, $password, $database);
 
 // Check for a successful connection
 if ($conn->connect_error) {
