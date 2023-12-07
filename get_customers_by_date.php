@@ -14,6 +14,12 @@ if ($conn->connect_error) {
 
 $date = $_POST['date'];
 
+// Create a DateTime object from the original date string
+$dateObject = DateTime::createFromFormat('m/d/Y', $date);
+
+// Format the DateTime object to yyyy-mm-dd format
+$formattedDate = $dateObject->format('Y-m-d');
+
 $query = "SELECT c.Customer_ID, c.First_Name, c.Last_Name
           FROM Customers c
           JOIN Transactions t ON c.Customer_ID = t.Customer_ID
@@ -22,7 +28,7 @@ $query = "SELECT c.Customer_ID, c.First_Name, c.Last_Name
           HAVING COUNT(t.Transaction_ID) > 2";
 
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $date);
+$stmt->bind_param("s", $formattedDate);
 $stmt->execute();
 $result = $stmt->get_result();
 
