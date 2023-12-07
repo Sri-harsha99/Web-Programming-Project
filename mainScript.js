@@ -1124,7 +1124,7 @@ function displayLowInventory() {
 
 function date2Customers() {
     date = document.getElementById('formDate');
-    formData = new formData()
+    formData = new FormData()
     formData.append('date',date);
     xhr.open('POST', 'get_customers_by_date.php', true);
     xhr.onreadystatechange = function () {
@@ -1161,7 +1161,7 @@ function zip2Customers() {
     xhr.open('POST', 'get_inventory.php', true);
     pincode = document.getElementById('pincode');
     month = document.getElementById('month');
-    formData = new formData()
+    formData = new FormData()
     formData.append('pincode',pincode);
     formData.append('month',month);
     xhr.open('POST', 'get_customers_by_zip_and_month.php', true);
@@ -1205,26 +1205,39 @@ if(inventoryTable){
 
 
 async function modifyInventory(){
-    xhr.open('POST', 'update_inventory_item.php', true);
-    item = document.getElementById('updateID');
-    price = document.getElementById('updatePrice');
-    inventory = document.getElementById('updateInventory');
-    formData = new formData()
-    formData.append('itemNumber',item);
-    formData.append('unitPrice',price);
-    formData.append('quantityInInventory',inventory);
-    xhr.open('POST', 'update_inventory_item.php', true);
 
-    xhr.onreadystatechange = async function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                await getProducts();
-            } else {
-                console.error('An error occurred during the AJAX request.');
-            }
-        }
-    };
-    xhr.send(formData);
+    var xhr = new XMLHttpRequest();
+            formData = new FormData();
+            item = document.getElementById('updateID').value;
+            price = document.getElementById('updatePrice').value;
+            inventory = document.getElementById('updateInventory').value;
+            
+            formData.append('itemNumber',item);
+            formData.append('unitPrice',price);
+            formData.append('quantityInInventory',inventory);
+        
+            
+            xhr.open('POST', 'update_inventory_item.php', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+        
+                        let data = xhr.responseText.toString();
+        
+                        if(data.includes("Error")){
+                            alert("Registration unsuccessful");
+                        }else{
+                            transactions = JSON.parse(data)
+                            displayTransactions();
+                        }
+                    } else {
+                        console.error('An error occurred during the AJAX request.');
+                    }
+                }
+            };
+            xhr.send(formData);
+
 }
 
 function logout(){
