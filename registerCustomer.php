@@ -20,7 +20,7 @@ $address = $_POST['address'];
 $customerID = time();
 
 // Insert customer information into the Customers table.
-$stmt = $conn->prepare("INSERT INTO Customers (Customer_ID, First_Name, Last_Name, Age, Email, Address) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO Customers (Customer_ID, First_Name, Last_Name, Dob, Email, Address) VALUES (?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("isssss", $customerID, $firstName, $lastName, $dob, $email, $address);
 $stmt->execute();
 
