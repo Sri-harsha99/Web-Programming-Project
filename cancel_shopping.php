@@ -27,8 +27,8 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $transactionId);
 $stmt->execute();
 
-// Delete the cart items
-$query = "DELETE FROM Carts WHERE Transaction_ID = ?";
+// Update the cart status to 'cancelled' instead of deleting the cart items
+$query = "UPDATE Carts SET Cart_status = 'cancelled' WHERE Transaction_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $transactionId);
 $stmt->execute();
@@ -42,7 +42,7 @@ $stmt->execute();
 // Commit transaction
 $conn->commit();
 
-echo "Shopping cancelled and inventory updated.";
+echo "Shopping cancelled, inventory updated, and cart status set to cancelled.";
 
 $stmt->close();
 $conn->close();
