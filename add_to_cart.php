@@ -17,6 +17,8 @@ $itemNumber = $_POST['itemNumber'];
 $quantity = $_POST['quantity'];
 $customerID = $_POST['customerID']; // Retrieve the customer ID from the session
 
+echo $itemNumber . $quantity . $customerID;
+
 // Check for an active cart
 $query = "SELECT Transaction_ID FROM Carts WHERE Customer_ID = ? AND Cart_status = 'in cart' LIMIT 1";
 $stmt = $conn->prepare($query);
