@@ -21,7 +21,7 @@ $query = "SELECT t.Transaction_ID, t.Transaction_Status, t.Transaction_Date, t.T
           FROM Transactions t
           JOIN Carts c ON t.Transaction_ID = c.Transaction_ID
           JOIN Inventory i ON c.Item_number = i.Item_number
-          WHERE t.Customer_ID = ? AND 
+          WHERE c.Customer_ID = ? AND 
                 (SUBSTRING(t.Transaction_Date, 1, 2) = '12' OR 
                  SUBSTRING(t.Transaction_Date, 1, 2) = '11' OR 
                  SUBSTRING(t.Transaction_Date, 1, 2) = '10')";
