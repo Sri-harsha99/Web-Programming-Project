@@ -1,4 +1,5 @@
 <?php
+
 $hostname = '128.199.7.149';
 $username = 'root';
 $password = 'change-me';
@@ -12,10 +13,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$customerID = $_SESSION['customerID']; // Retrieve the customer ID from the session
+$customerID = $_POST['customerID']; // Retrieve the customer ID from the session
 
-// Transactions for the last 3 months
-$query = "SELECT * FROM Transactions WHERE Customer_ID = ? AND Transaction_Date >= DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+// Transactions for the months of December, November, and October
+$query = "SELECT t.Transaction_ID, t.Transaction_Status, t.Transaction_Date, t.Total_Price, 
+                 c.Item_number, c.Quantity, i.Name, i.Category, i.Subcategory, i.Unit_price
+          FROM Transactions t
+          JOIN Carts c ON t.Transaction_ID = c.Transaction_ID
+          JOIN Inventory i ON c.Item_number = i.Item_number
+          WHERE t.Customer_ID = ? AND 
+                (SUBSTRING(t.Transaction_Date, 1, 2) = '12' OR 
+                 SUBSTRING(t.Transaction_Date, 1, 2) = '11' OR 
+                 SUBSTRING(t.Transaction_Date, 1, 2) = '10')";
+
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $customerID);
 $stmt->execute();

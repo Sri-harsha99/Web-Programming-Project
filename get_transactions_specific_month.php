@@ -14,19 +14,19 @@ if ($conn->connect_error) {
 }
 
 $customerID = $_POST['customerID']; // Retrieve the customer ID from the session
-$year = $_POST['year']; // The specific year to filter transactions
+$monthid = $_POST['month'];
 
-// Transactions for a specific year
+// Transactions for the months of December, November, and October
 $query = "SELECT t.Transaction_ID, t.Transaction_Status, t.Transaction_Date, t.Total_Price, 
                  c.Item_number, c.Quantity, i.Name, i.Category, i.Subcategory, i.Unit_price
           FROM Transactions t
           JOIN Carts c ON t.Transaction_ID = c.Transaction_ID
           JOIN Inventory i ON c.Item_number = i.Item_number
           WHERE t.Customer_ID = ? AND 
-                RIGHT(t.Transaction_Date, 4) = ?";
+                (SUBSTRING(t.Transaction_Date, 1, 2) = ?)";
 
 $stmt = $conn->prepare($query);
-$stmt->bind_param("is", $customerID, $year);
+$stmt->bind_param("is", $customerID, $monthid);
 $stmt->execute();
 $result = $stmt->get_result();
 
