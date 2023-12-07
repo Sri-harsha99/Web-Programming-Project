@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         signup.style.display = "none";
     }else{
         logout.style.display = "none";
+        adminPage.style.display = "none";
     }
 
 let selectedCategory = "all";
@@ -910,6 +911,7 @@ function getTransactions(){
                     alert("Registration unsuccessful");
                 }else{
                     transactions = JSON.parse(data);
+                    displayTransactions();
                 }
             } else {
                 console.error('An error occurred during the AJAX request.');
@@ -988,7 +990,7 @@ function filterTransactions() {
 
             var xhr = new XMLHttpRequest();
             formData = new FormData();
-            formData.append("transactionId",cartProducts[0].Transaction_ID)
+            formData.append("customerID",getCustomerID())
             formData.append("month",monthFilter)
             
             xhr.open('POST', 'get_transactions_specific_month.php', true);
@@ -1014,20 +1016,39 @@ function filterTransactions() {
 
             break;
         case 'last3months':
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth() + 1; // Months are 0-based
-            const last3Months = Array.from({ length: 3 }, (_, index) => (currentMonth - index + 12) % 12 + 1);
-            filteredTransactions = transactions.filter(transaction => {
-                const transactionMonth = new Date(transaction.date).getMonth() + 1; // Months are 0-based
-                return last3Months.includes(transactionMonth);
-            });
-            break;
+            
+        var xhr = new XMLHttpRequest();
+        formData = new FormData();
+        formData.append("customerID",getCustomerID())
+        
+        xhr.open('POST', 'get_transactions_last_3_months.php', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+    
+                    let data = xhr.responseText.toString();
+    
+                    if(data.includes("Error")){
+                        alert("Registration unsuccessful");
+                    }else{
+                        transactions = JSON.parse(data)
+                        displayTransactions();
+                    }
+                } else {
+                    console.error('An error occurred during the AJAX request.');
+                }
+            }
+        };
+        xhr.send(formData);
+
+        break;
         case 'year':
             
         var xhr = new XMLHttpRequest();
         formData = new FormData();
-        formData.append("transactionId",cartProducts[0].Transaction_ID)
-        formData.append("year",monthFilter)
+        formData.append("customerID",getCustomerID())
+        formData.append("month",yearFilter)
         
         xhr.open('POST', 'get_transactions_specific_year.php', true);
         xhr.onreadystatechange = function () {
@@ -1049,11 +1070,9 @@ function filterTransactions() {
             }
         };
         xhr.send(formData);
-            break;
-    }
 
-    // Display the filtered transactions
-    displayTransactions(filteredTransactions);
+        break;
+    }
 }
 
 // Initial display of transactions
@@ -1095,7 +1114,7 @@ function displayLowInventory() {
             <td>${each.id}</td>
             <td>${each.name}</td>
             <td>${each.type}</td>
-            <td>${each.subCategory}</td>
+            <td>${each.category}</td>
             <td>${Number(each.inventory)}</td>
             <td>${each.price}</td>
         `;
