@@ -38,9 +38,10 @@ if ($result->num_rows > 0) {
     $transactionId = $conn->insert_id; // Get the newly created Transaction_ID
 
     // Create a new cart entry with the new Transaction_ID
-    $query = "INSERT INTO Carts (Customer_ID, Transaction_ID, Item_number, Cart_status) VALUES (?, ?, ?, 'in cart')";
+    $temp = 0;
+    $query = "INSERT INTO Carts (Customer_ID, Transaction_ID, Item_number, Quantity, Cart_status) VALUES (?, ?, ?, 'in cart')";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("iii", $customerID, $transactionId, $itemNumber, 0);
+    $stmt->bind_param("iii", $customerID, $transactionId, $itemNumber, $temp);
     $stmt->execute();
 }
 
