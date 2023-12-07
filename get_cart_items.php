@@ -1,5 +1,4 @@
 <?php
-session_start(); // Start the session to use session variables
 
 $hostname = '128.199.7.149';
 $username = 'root';
@@ -15,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Retrieve the customer ID from the session or request
-$customerID = $_SESSION['customerID'] ?? $_POST['customerID']; // Use the session variable if available, otherwise use the POST variable
+$customerID = $_POST['customerID']; // Use the session variable if available, otherwise use the POST variable
 
 $query = "SELECT i.Item_number, i.Category, i.Subcategory, i.Name, c.Quantity, i.Unit_price, t.Transaction_ID, t.Total_Price
           FROM Carts c
