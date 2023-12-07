@@ -2,7 +2,9 @@
 <html>
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xml-js@1.6.11/dist/xml-js.min.js"></script>
     <script src="mainScript.js"></script>
+    
     <link rel="stylesheet" href="mystyle.css">
 </head>
 <body>
@@ -81,8 +83,11 @@
                 </div>
 
                 <br><br>
-
-                <button onclick="displayInventory()">Show Inventory</button>
+                <div style="display: flex; flex-direction: row; justify-content: center;">
+                    <button style="margin-right: 2rem;" onclick="displayInventory()">Show Inventory</button>
+                    <button onclick="displayLowInventory()">Show low Inventory</button>    
+                </div>
+                
                 <div style="overflow-y: auto; height: 50vh;">
                     <table>
                         <thead>
@@ -100,6 +105,38 @@
                         </tbody>
                     </table>
                 </div>
+                <br><br>
+
+                <div style="display: flex; flex-direction: row; justify-content: center;">
+                    <input type="text" id="formDate">
+                    <button style="margin-right: 2rem;" onclick="displayInventory()">More than two transactions on a date</button>
+                    <input type="text" id="pincode" placeholder="pincode">
+                    <input type="text" id="month" placeholder="Month">
+                    <button onclick="displayLowInventory()">Show low Inventory</button>    
+                </div>
+                
+                <div style="overflow-y: auto; height: 50vh;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Transaction data will be inserted here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <br><br>
+                Update Inventory of Item:
+                <input type="text" id="updateID">
+                <input type="text" id="updatePrice">
+                <input type="text" id="updateInventory">
+                <button onclick="modifyInventory()"></button>
+
+
                 
             </div>
             <div style="display: none;" id="products-list" class="products-list">
@@ -111,14 +148,7 @@
         <input type="text" id="search-input" placeholder="Search products">
         <button type="submit">Search</button>
     </form>
-    <div class="footer-div">
-        <p>Nile</p>
-        <p>First Name: Venkata Sri Harsha</p>
-        <p>Last Name: Maddirala</p>
-        <p>NetId: vxm220023</p>
-        <p>Course: CS 6314</p>
-        <p>section: 001</p>
-    </footer>
+
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

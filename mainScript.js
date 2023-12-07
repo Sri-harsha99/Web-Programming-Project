@@ -1,6 +1,7 @@
 let products = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
+
     let user;
 
     var login = document.getElementById("logIN");
@@ -108,6 +109,8 @@ async function getProducts() {
         } else {
             // console.log(data);
             products = JSON.parse(data);
+            const productList = document.getElementById("products-list");
+            addProductsToPage(productList);
         }
     } catch (error) {
         console.error('An error occurred during the fetch request:', error);
@@ -137,7 +140,7 @@ categorySelector.addEventListener('change', function () {
         productImage.alt = product.name;
 
         const productInfo = document.createElement("div");
-        productInfo.textContent = `${product.name} - $${product.price.toFixed(2)}`;
+        productInfo.textContent = `${product.name} - $${Number(product.price).toFixed(2)}`;
 
         const qty = document.createElement("input");
         qty.className="qty-input";
@@ -146,7 +149,7 @@ categorySelector.addEventListener('change', function () {
         addToCartButton.textContent = "Add to Cart";
 
         addToCartButton.addEventListener("click", () => {
-            if(qty.value>product.inventory){
+            if(qty.value>Number(product.inventory)){
                 alert(`Not enough inventory`);
                 return;
             }
@@ -179,47 +182,49 @@ function addProductsToPage(productList,filteredProducts) {
     selectedType = document.getElementById('type').value;
     
     
-    if(filteredProducts == null){
+    if(filteredProducts ==  null && products.length !== 0){
         filteredProducts = products.filter(product => product.type === selectedType && (selectedCategory === 'all' || (selectedCategory !== "fruits" ? product.category === selectedCategory : product.category === selectedCategory || product.category === "pre-cut fruits")));
     
     }
+    if(filteredProducts){
+        filteredProducts.forEach((product) => {
+            const listItem = document.createElement("div");
+    
+            const productImage = document.createElement("img");
+            productImage.src = product.image;
+            productImage.alt = product.name;
+    
+            const productInfo = document.createElement("div");
+            productInfo.textContent = `${product.name} - $${Number(product.price).toFixed(2)}`;
+    
+            const qty = document.createElement("input");
+            qty.className="qty-input";
+            qty.type = "number";
+            qty.min = "0";
+    
+            const addToCartButton = document.createElement("button");
+            addToCartButton.textContent = "Add to Cart";
+    
+            addToCartButton.addEventListener("click", () => {
 
-    filteredProducts.forEach((product) => {
-        const listItem = document.createElement("div");
-
-        const productImage = document.createElement("img");
-        productImage.src = product.image;
-        productImage.alt = product.name;
-
-        const productInfo = document.createElement("div");
-        productInfo.textContent = `${product.name} - $${product.price.toFixed(2)}`;
-
-        const qty = document.createElement("input");
-        qty.className="qty-input";
-        qty.type = "number";
-        qty.min = "0";
-
-        const addToCartButton = document.createElement("button");
-        addToCartButton.textContent = "Add to Cart";
-
-        addToCartButton.addEventListener("click", () => {
-            if(qty.value>product.inventory){
-                alert(`Not enough inventory`);
-                return;
-            }
-            product.inventory -= qty.value;
-            addToCart(product,qty.value);
-            qty.value = "";
-            alert(`Added ${product.name} to the cart!`);
+                if(qty.value>product.inventory){
+                    alert(`Not enough inventory`);
+                    return;
+                }
+                product.inventory -= qty.value;
+                addToCart(product,qty.value);
+                qty.value = "";
+                alert(`Added ${product.name} to the cart!`);
+            });
+    
+            listItem.appendChild(productImage);
+            listItem.appendChild(productInfo);
+            listItem.appendChild(qty);
+            listItem.appendChild(addToCartButton);
+    
+            productList.appendChild(listItem);
         });
-
-        listItem.appendChild(productImage);
-        listItem.appendChild(productInfo);
-        listItem.appendChild(qty);
-        listItem.appendChild(addToCartButton);
-
-        productList.appendChild(listItem);
-    });
+    }
 }
 
 function displayCart(cartList){
@@ -317,44 +322,44 @@ function addToCart(product,qty){
     const productList = document.getElementById("cart-products");
     displayCart(productList);
 
-    async function updateXMLData(products) {
-        try {
-            await $.ajax({
-                url: 'index.php',
-                type: 'post',
-                data: {action: 'updateXML', data: objectToXml(products)},
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        } catch (error) {
-            console.log('Error occurred', error);
-        }
-    }
+    // async function updateXMLData(products) {
+    //     try {
+    //         await $.ajax({
+    //             url: 'index.php',
+    //             type: 'post',
+    //             data: {action: 'updateXML', data: objectToXml(products)},
+    //             success: function(response) {
+    //                 console.log(response);
+    //             },
+    //             error: function() {
+    //                 console.log('Error occurred');
+    //             }
+    //         });
+    //     } catch (error) {
+    //         console.log('Error occurred', error);
+    //     }
+    // }
 
-    async function updateJSONData(products) {
-        try {
-            await $.ajax({
-                url: 'index.php',
-                type: 'post',
-                data: {action: 'updateJSON', data: returnJSON(products)},
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        } catch (error) {
-            console.log('Error occurred', error);
-        }
-    }
+    // async function updateJSONData(products) {
+    //     try {
+    //         await $.ajax({
+    //             url: 'index.php',
+    //             type: 'post',
+    //             data: {action: 'updateJSON', data: returnJSON(products)},
+    //             success: function(response) {
+    //                 console.log(response);
+    //             },
+    //             error: function() {
+    //                 console.log('Error occurred');
+    //             }
+    //         });
+    //     } catch (error) {
+    //         console.log('Error occurred', error);
+    //     }
+    // }
 
-    updateXMLData(products);
-    updateJSONData(products);
+    // updateXMLData(products);
+    // updateJSONData(products);
 }
 
 const cartButtons = document.getElementById("cartButtons");
@@ -669,8 +674,49 @@ function readXMLFile() {
         reader.onload = function (e) {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(e.target.result, 'text/xml');
-            console.log('XML Data:', xmlDoc);
-            // You can process the XML data as needed
+            const productNodes = xmlDoc.getElementsByTagName("product");
+
+            let temp = [];
+            for (let i = 0; i < productNodes.length; i++) {
+                let productNode = productNodes[i];
+                let category = "";
+                const name = productNode.getElementsByTagName("name")[0].textContent;
+                const type = productNode.getElementsByTagName("type")[0].textContent;
+                const dataType = productNode.getElementsByTagName("dataType")[0].textContent;
+                const price = parseInt(productNode.getElementsByTagName("price")[0].textContent);
+                
+                if(productNode.getElementsByTagName("category") && productNode.getElementsByTagName("category")[0]){
+                    category = productNode.getElementsByTagName("category")[0].textContent;
+                }
+                const inventory = parseInt(productNode.getElementsByTagName("inventory")[0].textContent);
+                const image = productNode.getElementsByTagName("image")[0].textContent;
+
+                temp.push({ name, type, price, dataType, category, inventory, image });
+            }
+            
+            console.log(temp)
+            const jsonData = JSON.stringify(temp);
+            console.log('JSON Data:', jsonData);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'insert_new_inventory.php', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+
+                        let data = xhr.responseText.toString();
+
+                        if(data.includes("Error")){
+                            alert("Registration unsuccessful");
+                        }
+                    } else {
+                        console.error('An error occurred during the AJAX request.');
+                    }
+                }
+            };
+            xhr.send(jsonData);
+
         };
 
         reader.readAsText(file);
@@ -783,15 +829,14 @@ function displayInventory() {
     // console.log(temp);
     // console.log(Array.isArray(products))
     temp.forEach((each) => {
-        console.log(each)
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${each.id}</td>
             <td>${each.name}</td>
             <td>${each.type}</td>
             <td>${each.category}</td>
-            <td>${each.price}</td>
             <td>${each.inventory}</td>
+            <td>${each.price}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -802,7 +847,7 @@ function displayLowInventory() {
     const tableBody = document.getElementById('inventoryTableBody');
     tableBody.innerHTML = '';
     temp = products.filter(each=>{
-        if(each.qty<3){
+        if(each.inventory<3){
             return true;
         }
     });
@@ -813,15 +858,18 @@ function displayLowInventory() {
             <td>${each.name}</td>
             <td>${each.type}</td>
             <td>${each.subCategory}</td>
+            <td>${Number(each.inventory)}</td>
             <td>${each.price}</td>
-            <td>${each.qty}</td>
         `;
         tableBody.appendChild(row);
     });
 }
 
 function date2Customers() {
-    xhr.open('POST', 'get_inventory.php', true);
+    date = document.getElementById('formDate');
+    formData = new formData()
+    formData.append('date',date);
+    xhr.open('POST', 'get_customers_by_date.php', true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
@@ -849,11 +897,18 @@ function date2Customers() {
             }
         }
     };
-    xhr.send();
+    xhr.send(formData);
 }
 
 function zip2Customers() {
     xhr.open('POST', 'get_inventory.php', true);
+    pincode = document.getElementById('pincode');
+    month = document.getElementById('month');
+    formData = new formData()
+    formData.append('pincode',pincode);
+    formData.append('month',month);
+    xhr.open('POST', 'get_customers_by_zip_and_month.php', true);
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
@@ -881,7 +936,7 @@ function zip2Customers() {
             }
         }
     };
-    xhr.send();
+    xhr.send(formData);
 }
 
 
@@ -889,4 +944,28 @@ let inventoryTable = document.getElementById('inventoryTableBody');
 
 if(inventoryTable){
     displayInventory();
+}
+
+
+async function modifyInventory(){
+    xhr.open('POST', 'update_inventory_item.php', true);
+    item = document.getElementById('updateID');
+    price = document.getElementById('updatePrice');
+    inventory = document.getElementById('updateInventory');
+    formData = new formData()
+    formData.append('itemNumber',item);
+    formData.append('unitPrice',price);
+    formData.append('quantityInInventory',inventory);
+    xhr.open('POST', 'update_inventory_item.php', true);
+
+    xhr.onreadystatechange = async function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                await getProducts();
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
 }
