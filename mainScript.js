@@ -26,62 +26,96 @@ const cartItems = document.getElementById('cartItems');
 updateTime();
 
 
-async function readXMLData(){
-    try{
-        let data = await $.ajax({
-            url: 'index.php',
-            type: 'post',
-            data: {action: 'readXML'}
-        })
+// async function readXMLData(){
+//     try{
+//         let data = await $.ajax({
+//             url: 'index.php',
+//             type: 'post',
+//             data: {action: 'readXML'}
+//         })
     
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(data, "text/xml");
-        const productNodes = xmlDoc.getElementsByTagName("product");
+//         const parser = new DOMParser();
+//         const xmlDoc = parser.parseFromString(data, "text/xml");
+//         const productNodes = xmlDoc.getElementsByTagName("product");
 
-        let temp = [];
-        for (let i = 0; i < productNodes.length; i++) {
-            let productNode = productNodes[i];
-            let category = "";
-            const name = productNode.getElementsByTagName("name")[0].textContent;
-            const type = productNode.getElementsByTagName("type")[0].textContent;
-            const dataType = productNode.getElementsByTagName("dataType")[0].textContent;
-            const price = parseInt(productNode.getElementsByTagName("price")[0].textContent);
+//         let temp = [];
+//         for (let i = 0; i < productNodes.length; i++) {
+//             let productNode = productNodes[i];
+//             let category = "";
+//             const name = productNode.getElementsByTagName("name")[0].textContent;
+//             const type = productNode.getElementsByTagName("type")[0].textContent;
+//             const dataType = productNode.getElementsByTagName("dataType")[0].textContent;
+//             const price = parseInt(productNode.getElementsByTagName("price")[0].textContent);
             
-            if(productNode.getElementsByTagName("category") && productNode.getElementsByTagName("category")[0]){
-                category = productNode.getElementsByTagName("category")[0].textContent;
-            }
-            const inventory = parseInt(productNode.getElementsByTagName("inventory")[0].textContent);
-            const image = productNode.getElementsByTagName("image")[0].textContent;
+//             if(productNode.getElementsByTagName("category") && productNode.getElementsByTagName("category")[0]){
+//                 category = productNode.getElementsByTagName("category")[0].textContent;
+//             }
+//             const inventory = parseInt(productNode.getElementsByTagName("inventory")[0].textContent);
+//             const image = productNode.getElementsByTagName("image")[0].textContent;
 
-            temp.push({ name, type, price, dataType, category, inventory, image });
+//             temp.push({ name, type, price, dataType, category, inventory, image });
+//         }
+//         products = temp;
+//         }
+//     catch{
+//         console.log('Error occurred');
+//     }
+            
+// }
+
+
+// async function readJSONData(){
+//     try{
+//         let data = await $.ajax({
+//             url: 'index.php',
+//             type: 'post',
+//             data: {action: 'readJSON'}
+//         })
+//         products = products.concat(data);
+//     }
+//     catch{
+//         console.log('Error occurred');
+//     }
+            
+// }
+
+
+// await readXMLData();
+// await readJSONData();
+
+async function getProducts() {
+    try {
+        const response = await fetch('get_inventory.php', {
+            method: 'POST',
+            // Add headers if needed, e.g., 'Content-Type': 'application/json'
+            // headers: {
+            //     'Content-Type': 'application/json',
+            // },
+            // You can add a body here if you need to send data with the request
+            // body: JSON.stringify({ key: 'value' }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-        products = temp;
+
+        const data = await response.text();
+
+        console.log(data);
+
+        if (data.includes('Error')) {
+            alert('unsuccessful');
+        } else {
+            console.log(data);
+            products = data;
         }
-    catch{
-        console.log('Error occurred');
+    } catch (error) {
+        console.error('An error occurred during the fetch request:', error);
     }
-            
 }
 
+await getProducts(); // No need for 'await' here, as 'getProducts' is not an asynchronous function now
 
-async function readJSONData(){
-    try{
-        let data = await $.ajax({
-            url: 'index.php',
-            type: 'post',
-            data: {action: 'readJSON'}
-        })
-        products = products.concat(data);
-    }
-    catch{
-        console.log('Error occurred');
-    }
-            
-}
-
-
-await readXMLData();
-await readJSONData();
 
 categorySelector.addEventListener('change', function () {
     const selectedCategory = categorySelector.value;
@@ -342,43 +376,48 @@ button1.addEventListener("click", function (e) {
         const productList = document.getElementById("cart-products");
         displayCart(productList);
 
-        async function updateXMLData(products) {
-            try {
-                await $.ajax({
-                    url: 'index.php',
-                    type: 'post',
-                    data: {action: 'updateXML', data: objectToXml(products)},
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function() {
-                        console.log('Error occurred');
-                    }
-                });
-            } catch (error) {
-                console.log('Error occurred', error);
-            }
-        }
+        // async function updateXMLData(products) {
+        //     try {
+        //         await $.ajax({
+        //             url: 'index.php',
+        //             type: 'post',
+        //             data: {action: 'updateXML', data: objectToXml(products)},
+        //             success: function(response) {
+        //                 console.log(response);
+        //             },
+        //             error: function() {
+        //                 console.log('Error occurred');
+        //             }
+        //         });
+        //     } catch (error) {
+        //         console.log('Error occurred', error);
+        //     }
+        // }
 
-        async function updateJSONData(products) {
-            try {
-                await $.ajax({
-                    url: 'index.php',
-                    type: 'post',
-                    data: {action: 'updateJSON', data: returnJSON(products)},
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function() {
-                        console.log('Error occurred');
-                    }
-                });
-            } catch (error) {
-                console.log('Error occurred', error);
-            }
-        }
-    updateJSONData(products);
-    updateXMLData(products);
+        // async function updateJSONData(products) {
+        //     try {
+        //         await $.ajax({
+        //             url: 'index.php',
+        //             type: 'post',
+        //             data: {action: 'updateJSON', data: returnJSON(products)},
+        //             success: function(response) {
+        //                 console.log(response);
+        //             },
+        //             error: function() {
+        //                 console.log('Error occurred');
+        //             }
+        //         });
+        //     } catch (error) {
+        //         console.log('Error occurred', error);
+        //     }
+        // }
+
+    // updateJSONData(products);
+    // updateXMLData(products);
+
+
+
+    updateInventory(products);
 })
 
 button2.addEventListener("click", function(e){
@@ -545,26 +584,6 @@ function validateForm() {
     
 }
 
-function readJSONFile() {
-    console.log('hi')
-    const input = document.getElementById('jsonFileInput');
-    
-    input.addEventListener('change', function () {
-        const file = input.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const jsonData = JSON.parse(e.target.result);
-                console.log('JSON Data:', jsonData);
-                // You can process the JSON data as needed
-            };
-
-            reader.readAsText(file);
-        }
-    });
-}
 
 var registerButton = document.getElementById("register");
 
@@ -602,7 +621,7 @@ function triggerXMLFileInput(inputId) {
     readXMLFile();
 }
 
-function readJSONFile() {
+async function readJSONFile() {
     const input = document.getElementById('jsonFileInput');
 
         const file = input.files[0];
@@ -610,8 +629,8 @@ function readJSONFile() {
         if (file) {
             const reader = new FileReader();
 
-            reader.onload = function (e) {
-                const jsonData = JSON.parse(e.target.result);
+            reader.onload = async function (e) {
+                const jsonData = JSON.stringify(e.target.result);
                 console.log('JSON Data:', jsonData);
                 //array of below
 
@@ -622,6 +641,56 @@ function readJSONFile() {
                 // name: "Corn"
                 // price 5
                 // type: "pantryProducts"
+
+                // var formData = new FormData();
+                // formData.append('data', jsonData);
+
+                // var xhr = new XMLHttpRequest();
+                //     xhr.open('POST', 'insert_new_inventory.php', true);
+                //     xhr.onreadystatechange = function () {
+                //         if (xhr.readyState === XMLHttpRequest.DONE) {
+                //             if (xhr.status === 200) {
+                //                 console.log(xhr.responseText);
+
+                //                 let data = xhr.responseText.toString();
+
+                //                 if(data.includes("Error")){
+                //                     alert("Registration unsuccessful");
+                //                 }
+                //             } else {
+                //                 console.error('An error occurred during the AJAX request.');
+                //             }
+                //         }
+                //     };
+                //     xhr.send(jsonData);
+
+                try {
+                    const response = await fetch('insert_new_inventory.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(jsonData),
+                    });
+            
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+            
+                    const data = await response.text();
+            
+                    console.log(data);
+            
+                    if (data.includes('Error')) {
+                        alert('unsuccessful');
+                    } else {
+                        console.log(data);
+                        products = data;
+                    }
+                } catch (error) {
+                    console.error('An error occurred during the fetch request:', error);
+                }
+
 
 
             };
@@ -649,4 +718,213 @@ function readXMLFile() {
         reader.readAsText(file);
     }
 
+}
+
+const transactions = [
+    {
+        id: 1,
+        status: "shipped",
+        items: [
+            { id: 101, name: "Product A", quantity: 2 },
+            { id: 102, name: "Product B", quantity: 1 }
+        ]
+    },
+    {
+        id: 2,
+        status: "not shipped",
+        items: [
+            { id: 103, name: "Product C", quantity: 3 },
+            { id: 104, name: "Product D", quantity: 1 }
+        ]
+    },
+    // Add more transactions as needed
+];
+
+function displayTransactions() {
+    const tableBody = document.getElementById('transactionTableBody');
+    tableBody.innerHTML = '';
+
+    transactions.forEach(transaction => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${transaction.id}</td>
+            <td>${transaction.status}</td>
+            <td>${transaction.items.map(item => `${item.name} (Qty: ${item.quantity})`).join(', ')}</td>
+            <td>${transaction.status === 'not shipped' ? `<button onclick="cancelTransaction(${transaction.id})">Cancel</button>` : ''}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function cancelTransaction(transactionId) {
+    const transactionIndex = transactions.findIndex(transaction => transaction.id === transactionId);
+
+    if (transactionIndex !== -1) {
+        const canceledTransaction = transactions.splice(transactionIndex, 1)[0];
+        console.log(`Transaction ${canceledTransaction.id} canceled.`);
+
+        // Update inventory (example: increase quantities)
+        canceledTransaction.items.forEach(item => {
+            // Your inventory update logic here
+            console.log(`Inventory updated for ${item.name}: Quantity increased by ${item.quantity}`);
+        });
+
+        // Refresh the displayed transactions after cancelation
+        displayTransactions();
+    }
+}
+
+function filterTransactions() {
+    const filterType = document.getElementById('filterType').value;
+    const monthFilter = document.getElementById('monthFilter').value;
+    const yearFilter = document.getElementById('yearFilter').value;
+
+    let filteredTransactions = [...transactions];
+
+    switch (filterType) {
+        case 'month':
+            filteredTransactions = transactions.filter(transaction => {
+                // Assuming date information is available in each transaction
+                const transactionMonth = new Date(transaction.date).getMonth() + 1; // Months are 0-based
+                return transactionMonth.toString() === monthFilter;
+            });
+            break;
+        case 'last3months':
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth() + 1; // Months are 0-based
+            const last3Months = Array.from({ length: 3 }, (_, index) => (currentMonth - index + 12) % 12 + 1);
+            filteredTransactions = transactions.filter(transaction => {
+                const transactionMonth = new Date(transaction.date).getMonth() + 1; // Months are 0-based
+                return last3Months.includes(transactionMonth);
+            });
+            break;
+        case 'year':
+            filteredTransactions = transactions.filter(transaction => {
+                // Assuming date information is available in each transaction
+                const transactionYear = new Date(transaction.date).getFullYear();
+                return transactionYear.toString() === yearFilter;
+            });
+            break;
+    }
+
+    // Display the filtered transactions
+    displayTransactions(filteredTransactions);
+}
+
+// Initial display of transactions
+let acc = document.getElementById('account');
+if(acc){
+    displayTransactions();
+}
+
+
+function displayInventory() {
+    const tableBody = document.getElementById('inventoryTableBody');
+    tableBody.innerHTML = '';
+    temp = products;
+    temp.forEach(each => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${each.id}</td>
+            <td>${each.name}</td>
+            <td>${each.type}</td>
+            <td>${each.subCategory}</td>
+            <td>${each.price}</td>
+            <td>${each.qty}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function displayLowInventory() {
+    const tableBody = document.getElementById('inventoryTableBody');
+    tableBody.innerHTML = '';
+    temp = products.filter(each=>{
+        if(each.qty<3){
+            return true;
+        }
+    });
+    temp.forEach(each => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${each.id}</td>
+            <td>${each.name}</td>
+            <td>${each.type}</td>
+            <td>${each.subCategory}</td>
+            <td>${each.price}</td>
+            <td>${each.qty}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function date2Customers() {
+    xhr.open('POST', 'get_inventory.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+
+                let temp = JSON.parse(xhr.responseText);
+                const tableBody = document.getElementById('customerTableBody');
+                tableBody.innerHTML = '';
+                
+                temp.forEach(each => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${each.id}</td>
+                        <td>${each.name}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }else{
+                    console.log(data)
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send();
+}
+
+function zip2Customers() {
+    xhr.open('POST', 'get_inventory.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+
+                let temp = JSON.parse(xhr.responseText);
+                const tableBody = document.getElementById('customerTableBody');
+                tableBody.innerHTML = '';
+                
+                temp.forEach(each => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${each.id}</td>
+                        <td>${each.name}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }else{
+                    console.log(data)
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send();
+}
+
+
+let inventoryTable = document.getElementById('inventoryTableBody');
+
+if(inventoryTable){
+    displayInventory();
 }

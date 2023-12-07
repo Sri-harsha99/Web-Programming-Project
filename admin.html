@@ -82,8 +82,23 @@
 
                 <br><br>
 
-                <div>
-
+                <button onclick="displayInventory()">Show Inventory</button>
+                <div style="overflow-y: auto; height: 50vh;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Inventory ID</th>
+                                <th>Inventory Name</th>
+                                <th>Category</th>
+                                <th>SubCategory</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Transaction data will be inserted here dynamically -->
+                        </tbody>
+                    </table>
                 </div>
                 
             </div>
