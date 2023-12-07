@@ -6,8 +6,12 @@
     <link rel="stylesheet" href="mystyle.css">
 </head>
 <body>
-    <div class="margin-0">
-        <h1 class="header-div">Nile</h1>
+    <div class="margin-0" >
+        <div class="centerDiv">Nile</div>
+        <div id="adminPage" class="margin-right-1"><a class="my-link" href="./admin.html">Admin</a></div>
+        <div id="logOUT">Log out</div>
+        <div id="signUP" class="margin-right-1"><a class="my-link" href="./register.html">Sign up</a></div>
+        <div id="logIN"><a class="my-link" href="./login.html">Log in</a></div>
     </div>
     <nav>
         <ul class="link-head">
@@ -31,44 +35,20 @@
         <div class="side-content">
             <div id="time"></div>
             <h2>Fresh Products</h2>
-            <!-- <div style="display: none;" id="categories">
-                <input style="display: none;" id="type" value="freshProducts">
-                <select id="categorySelector">
-                    <option value="all" selected>Shop All</option>
-                    <option value="vegetables">All Vegetables</option>
-                    <option value="fruits">All Fruits</option>
-                    <option value="pre-cut fruits">Precut fruits</option>
-                    <option value="flowers">Flowers</option>
-                    <option value="salsa">Salsa</option>
-                    <option value="season produce">Season Produce</option>
-                    <option value="new items">New items</option>
-                    <option value="rollbacks">Rollbacks</option>
-                </select>
-            </div>
-
-            <div>
-                <h2 class="margin-2">Cart</h2>
-                <div id="cart-products" class="cart-products">
-
-                </div>
-                <div class="cartButtons">
-                    <button id="remove" onc>Empty Cart</button>
-                    <button id="buy">Buy Cart</button>
-                </div>
-            </div> -->
         </div>
         <div class="main-content">
-            <h2>Login</h2>
+            <h2>Register</h2>
             <div id="products-list" class="products-list">
-                <form id="registrationForm" action="/login" method="post" onsubmit="return loginForm()">
-                    <label for="username">User Name:</label>
-                    <input type="text" id="username" name="username" required><br><br>
-            
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required><br><br>
-            
-                    <input type="submit" value="Login"><br><br>
-                </form>
+            </div>
+            <div id="login-Form">
+                <label for="username">User Name:</label>
+                <input type="text" id="username" name="username" required><br><br>
+        
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+        
+                
+                <button id="login">Login</button><br><br>
             </div>
         </div>
     </div>
@@ -76,6 +56,12 @@
         <input type="text" id="search-input" placeholder="Search products">
         <button type="submit">Search</button>
     </form>
+    <div id="categorySelector">
+    </div>
+    <div style="display: none;" class="cartButtons">
+        <button id="remove" onc>Empty Cart</button>
+        <button id="buy">Buy Cart</button>
+    </div>
     <div class="footer-div">
         <p>Nile</p>
         <p>First Name: Venkata Sri Harsha</p>
@@ -84,14 +70,16 @@
         <p>Course: CS 6314</p>
         <p>section: 001</p>
     </div>
+    <input style="display: none;" id="type" value="freshProds">
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     const event = new Event("change");
-    let elem = document.getElementById("categorySelector"); 
-    elem.dispatchEvent(event);
-    document.querySelector('empty').addEventListener('click', removeFromCart);
-    document.querySelector('buy').addEventListener('click', buyCart);
+    let elem = document.getElementById("categorySelector");
+    if(elem){
+        elem.dispatchEvent(event);
+    } 
+    
     })
 
 </script>

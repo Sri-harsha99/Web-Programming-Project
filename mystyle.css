@@ -14,6 +14,10 @@ body {
     justify-content: center;
 }
 
+.width-100{
+    width: 100% !important;
+}
+
 .centerDiv{
     margin-left: 50%;
     margin-right: auto;

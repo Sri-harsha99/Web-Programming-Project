@@ -1,6 +1,23 @@
 let products = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
+    let user;
+
+    var login = document.getElementById("logIN");
+    var signup = document.getElementById("signUP");
+    var logout = document.getElementById("logOUT");
+    var adminPage = document.getElementById("adminPage");
+
+    if (localStorage.getItem('user')) {
+        user = JSON.parse(localStorage.getItem('user'))['user'];
+        if(!user.Isadmin){
+            adminPage.style.display = "none";
+        }
+        login.style.display = "none";
+        signup.style.display = "none";
+    }else{
+        logout.style.display = "none";
+    }
 
 let selectedCategory = "all";
 const categorySelector = document.getElementById('categorySelector');
@@ -377,7 +394,8 @@ const productList = document.getElementById("products-list");
 addProductsToPage(productList);
 
 const cartList = document.getElementById("cart-products");
-displayCart(cartList);
+if(cartList)
+    displayCart(cartList);
 
 function hasNumbers(inputString) {
     const regex = /\d/;
@@ -407,102 +425,145 @@ searchForm.addEventListener("submit", function (e) {
     addProductsToPage(productList, filteredProducts);
 });
 
-function loginForm() {
-    
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
+const loginForm = document.getElementById("login-Form");
+if(loginForm){
+    loginButton = document.getElementById("login");
+    loginButton.addEventListener("click", function (e) {
+        
+        async function loginCustomer() {
+        
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            
+            var formData = new FormData();
+                    formData.append('username', username);
+                    formData.append('password', password);
+        
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'login.php', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        let data = xhr.responseText.toString();
 
-    let object = {
-        username:username,
-        password:password
-    }
-
-
-    async function loginCustomer() {
-        try {
-            await $.ajax({
-                url: 'index.php',
-                type: 'post',
-                data: {action: 'loginCustomer', data: returnJSON(object)},
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function() {
-                    console.log('Error occurred');
+                        if(data.includes("Error")){
+                            alert("Login unsuccessful");
+                        }else{
+                            localStorage.setItem("user",data);
+                            window.location.href = 'http://localhost/wpl/index.html';
+                        }
+                        
+                    } else {
+                        console.error('An error occurred during the AJAX request.');
+                    }
                 }
-            });
-        } catch (error) {
-            console.log('Error occurred', error);
+            };
+            xhr.send(formData);
+
         }
-    }
-
-    loginCustomer();
-
+        loginCustomer();
+    });
 }
+
+const signupForm = document.getElementById("signup-Form");
+if(signupForm){
+    registerButton = document.getElementById("register");
+    registerButton.addEventListener("click", function (e) {
+        async function registerCustomer() {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+        var firstName = document.getElementById('firstName').value;
+        var lastName = document.getElementById('lastName').value;
+        var dob = document.getElementById('dob').value;
+        var email = document.getElementById('email').value;
+        var address = document.getElementById('address').value;
+    
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return false;
+        }
+    
+        if (password.length < 8) {
+            alert("Password must be at least 8 characters.");
+            return false;
+        }
+    
+        var dobRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+        if (!dob.match(dobRegex)) {
+            alert("Date of birth must be in MM/DD/YYYY format.");
+            return false;
+        }
+    
+        var emailRegex = /\S+@\S+\.\S+/;
+        if (!email.match(emailRegex)) {
+            alert("Invalid email format.");
+            return false;
+        }
+
+        var formData = new FormData();
+                formData.append('userName', username);
+                formData.append('password', password);
+                formData.append('firstName', firstName);
+                formData.append('lastName', lastName);
+                formData.append('email', email);
+                formData.append('dob', dob);
+                formData.append('address', address);
+    
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'registerCustomer.php', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+
+                    let data = xhr.responseText.toString();
+
+                    if(data.includes("Error")){
+                        alert("Registration unsuccessful");
+                    }else{
+                        alert("Registered successfully")
+                    }
+                } else {
+                    console.error('An error occurred during the AJAX request.');
+                }
+            }
+        };
+        xhr.send(formData);
+
+        }
+        registerCustomer();
+    });
+}
+
+
 
 
 function validateForm() {
     
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
-    var confirmPassword = document.getElementById('confirmPassword').value;
-    var firstName = document.getElementById('firstName').value;
-    var lastName = document.getElementById('lastName').value;
-    var dob = document.getElementById('dob').value;
-    var email = document.getElementById('email').value;
-    var address = document.getElementById('address').value;
+    
+}
 
-    if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return false;
-    }
+function readJSONFile() {
+    console.log('hi')
+    const input = document.getElementById('jsonFileInput');
+    
+    input.addEventListener('change', function () {
+        const file = input.files[0];
 
-    if (password.length < 8) {
-        alert("Password must be at least 8 characters.");
-        return false;
-    }
+        if (file) {
+            const reader = new FileReader();
 
-    var dobRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-    if (!dob.match(dobRegex)) {
-        alert("Date of birth must be in MM/DD/YYYY format.");
-        return false;
-    }
+            reader.onload = function (e) {
+                const jsonData = JSON.parse(e.target.result);
+                console.log('JSON Data:', jsonData);
+                // You can process the JSON data as needed
+            };
 
-    var emailRegex = /\S+@\S+\.\S+/;
-    if (!email.match(emailRegex)) {
-        alert("Invalid email format.");
-        return false;
-    }
-
-    let object = {
-        username:username,
-        password:password,
-        firstName:firstName,
-        lastName:lastName,
-        dob:dob,
-        email:email,
-        address:address    
-    }
-
-    async function registerCustomer() {
-        try {
-            await $.ajax({
-                url: 'index.php',
-                type: 'post',
-                data: {action: 'registerCustomer', data: returnJSON(object)},
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        } catch (error) {
-            console.log('Error occurred', error);
+            reader.readAsText(file);
         }
-    }
-
-    registerCustomer();
+    });
 }
 
 var registerButton = document.getElementById("register");
@@ -528,3 +589,64 @@ function updateTime() {
     setInterval(updateTime, 1000);
 }
 
+
+function triggerFileInput(inputId) {
+    const fileInput = document.getElementById(inputId);
+    fileInput.click();
+    readJSONFile();
+}
+
+function triggerXMLFileInput(inputId) {
+    const fileInput = document.getElementById(inputId);
+    fileInput.click();
+    readXMLFile();
+}
+
+function readJSONFile() {
+    const input = document.getElementById('jsonFileInput');
+
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const jsonData = JSON.parse(e.target.result);
+                console.log('JSON Data:', jsonData);
+                //array of below
+
+                // category: "canned goods"
+                // dataType: "json"
+                // image: "images/corn.webp"
+                // inventory: 6
+                // name: "Corn"
+                // price 5
+                // type: "pantryProducts"
+
+
+            };
+
+            reader.readAsText(file);
+        }
+}
+
+function readXMLFile() {
+    const input = document.getElementById('xmlFileInput');
+
+
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(e.target.result, 'text/xml');
+            console.log('XML Data:', xmlDoc);
+            // You can process the XML data as needed
+        };
+
+        reader.readAsText(file);
+    }
+
+}

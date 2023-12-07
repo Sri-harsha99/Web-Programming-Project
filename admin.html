@@ -32,39 +32,62 @@
         </ul>
     </nav>
     <div class="container">
-        <div class="side-content">
+        <div style="display: none;" class="side-content">
             <div id="time"></div>
-            <h2>Frozen products</h2>
-            <div id="categories">
-                <input style="display: none;" id="type" value="frozenProducts">
-                <select id="categorySelector">
-                    <option value="all" selected>Shop All</option>
-                    <option value="frozen breakfast">Frozen Breakfast</option>
-                    <option value="frozen breakfast">Frozen Desert</option>
-                    <option value="frozen meals">Frozen Meals</option>
-                    <option value="frozen pizza">Frozen Pizza</option>
-                    <option value="frozen meat">Frozen Meat</option>
-                    <option value="frozen snacks">Frozen Snacks</option>
-                    <option value="rollbacks">Rollback</option>
-                </select>
-            </div>
-
-
+            <h2>Our Benefits</h2>
+            <ol>
+                <li>Fast Shipping</li>
+                <li>Easy returns</li>
+                <li>Cheaper Price</li>
+            </ol>
+            
             <div>
                 <h2 class="margin-2">Cart</h2>
+                <div id="time"></div>
                 <div id="cart-products" class="cart-products">
 
                 </div>
-                <div class="cartButtons">
+                <div style="display: none;" class="cartButtons">
                     <button id="remove" onc>Empty Cart</button>
                     <button id="buy">Buy Cart</button>
                 </div>
             </div>
-
+            <div style="display: none;" id="categories">
+                <input style="display: none;" id="type" value="pantryProducts">
+                <select id="categorySelector">
+                    <option value="all" selected>Shop All</option>
+                    <option value="canned vegetables">Canned Vegetables</option>
+                    <option value="canned goods">Canned Goods</option>
+                    <option value="condiments">Condiments</option>
+                    <option value="peanut butter">Peanut Butter</option>
+                    <option value="pasta">Pasta</option>
+                    <option value="rollbacks">Rollback</option>
+                </select>
+            </div>
         </div>
-        <div class="main-content">
-            <h2>Frozen section</h2>
-            <div id="products-list" class="products-list">
+        <div class="main-content-index">
+            <div class="home-back width-100">
+                <div class="div1">
+                    <div style="display: flex;flex-direction: row; justify-content: center;">
+
+                        <button style="margin-right: 2rem;" onclick="triggerFileInput('jsonFileInput')">Upload JSON File</button>
+                        <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+                        
+
+                        <button onclick="triggerXMLFileInput('xmlFileInput')">Upload XML File</button>
+                        <input type="file" id="xmlFileInput" accept=".xml" style="display: none;">
+                        
+                    </div>
+                </div>
+
+                <br><br>
+
+                <div>
+
+                </div>
+                
+            </div>
+            <div style="display: none;" id="products-list" class="products-list">
 
             </div>
         </div>
@@ -84,12 +107,9 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(()=>{
-            const event = new Event("change");
-            let elem = document.getElementById("categorySelector"); 
-            elem.dispatchEvent(event);
-        },1)
-        
-    })
+const event = new Event("change");
+let elem = document.getElementById("categorySelector"); 
+elem.dispatchEvent(event);
+})
 </script>
 </html>
