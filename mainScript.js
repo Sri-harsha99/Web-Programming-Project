@@ -176,6 +176,28 @@ if(curr){
     cartProducts = [];
 }
 
+function getCustomerID() {
+    // Retrieve the 'user' object from localStorage
+    const userJson = localStorage.getItem('user');
+    
+    // Parse the JSON string to an object
+    const userObj = JSON.parse(userJson);
+    
+    // Access the 'Customer_ID' property of the 'user' object
+    const customerID = userObj.user.Customer_ID;
+    
+    return customerID;
+}
+
+async function getCart() {
+    try {
+    } catch (error) {
+        console.error('An error occurred during the fetch cart:', error);
+    }
+}
+
+await getProducts();
+
 function addProductsToPage(productList,filteredProducts) {
 
     productList.innerHTML = '';
@@ -227,9 +249,13 @@ function addProductsToPage(productList,filteredProducts) {
     }
 }
 
+
 function displayCart(cartList){
     cartList.innerHTML = '';
     total = 0;
+    const customerID = getCustomerID();
+    console.log('Customer ID:', customerID);
+
     cartProducts.forEach((product) => {
         const listItem = document.createElement("div");
 
