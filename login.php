@@ -29,7 +29,7 @@ if ($user = $result->fetch_assoc()) {
     echo json_encode(['success' => true, 'user' => $user]);
 } else {
     // User not found, return failure message
-    echo json_encode(['error' => false, 'message' => 'Invalid credentials.']);
+    echo json_encode(['error' => false, 'message' => 'Invalid error credentials.']);
 }
 
 // Close the statement and the database connection
