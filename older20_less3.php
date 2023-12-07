@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $query = "SELECT c.Customer_ID, c.First_Name, c.Last_Name
           FROM Customers c
           JOIN Transactions t ON c.Customer_ID = t.Customer_ID
-          WHERE TIMESTAMPDIFF(YEAR, c.Date_of_birth, CURDATE()) > 20
+          WHERE RIGHT(c.Date_of_birth, 4) < '2003'
           GROUP BY c.Customer_ID
           HAVING COUNT(t.Transaction_ID) > 3";
 

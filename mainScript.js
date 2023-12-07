@@ -101,13 +101,13 @@ async function getProducts() {
 
         const data = await response.text();
 
-        console.log(data);
+        // console.log(data);
 
         if (data.includes('Error')) {
             alert('unsuccessful');
         } else {
-            console.log(data);
-            products = data;
+            // console.log(data);
+            products = JSON.parse(data);
         }
     } catch (error) {
         console.error('An error occurred during the fetch request:', error);
@@ -630,69 +630,27 @@ async function readJSONFile() {
             const reader = new FileReader();
 
             reader.onload = async function (e) {
-                const jsonData = JSON.stringify(e.target.result);
+                const jsonData = JSON.stringify(JSON.parse(e.target.result));
                 console.log('JSON Data:', jsonData);
-                //array of below
 
-                // category: "canned goods"
-                // dataType: "json"
-                // image: "images/corn.webp"
-                // inventory: 6
-                // name: "Corn"
-                // price 5
-                // type: "pantryProducts"
+                var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'insert_new_inventory.php', true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                console.log(xhr.responseText);
 
-                // var formData = new FormData();
-                // formData.append('data', jsonData);
+                                let data = xhr.responseText.toString();
 
-                // var xhr = new XMLHttpRequest();
-                //     xhr.open('POST', 'insert_new_inventory.php', true);
-                //     xhr.onreadystatechange = function () {
-                //         if (xhr.readyState === XMLHttpRequest.DONE) {
-                //             if (xhr.status === 200) {
-                //                 console.log(xhr.responseText);
-
-                //                 let data = xhr.responseText.toString();
-
-                //                 if(data.includes("Error")){
-                //                     alert("Registration unsuccessful");
-                //                 }
-                //             } else {
-                //                 console.error('An error occurred during the AJAX request.');
-                //             }
-                //         }
-                //     };
-                //     xhr.send(jsonData);
-
-                try {
-                    const response = await fetch('insert_new_inventory.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(jsonData),
-                    });
-            
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-            
-                    const data = await response.text();
-            
-                    console.log(data);
-            
-                    if (data.includes('Error')) {
-                        alert('unsuccessful');
-                    } else {
-                        console.log(data);
-                        products = data;
-                    }
-                } catch (error) {
-                    console.error('An error occurred during the fetch request:', error);
-                }
-
-
-
+                                if(data.includes("Error")){
+                                    alert("Registration unsuccessful");
+                                }
+                            } else {
+                                console.error('An error occurred during the AJAX request.');
+                            }
+                        }
+                    };
+                    xhr.send(jsonData);
             };
 
             reader.readAsText(file);
@@ -821,20 +779,24 @@ if(acc){
 function displayInventory() {
     const tableBody = document.getElementById('inventoryTableBody');
     tableBody.innerHTML = '';
-    temp = products;
-    temp.forEach(each => {
+    const temp = products; // Ensure 'products' is defined and accessible
+    // console.log(temp);
+    // console.log(Array.isArray(products))
+    temp.forEach((each) => {
+        console.log(each)
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${each.id}</td>
             <td>${each.name}</td>
             <td>${each.type}</td>
-            <td>${each.subCategory}</td>
+            <td>${each.category}</td>
             <td>${each.price}</td>
-            <td>${each.qty}</td>
+            <td>${each.inventory}</td>
         `;
         tableBody.appendChild(row);
     });
 }
+
 
 function displayLowInventory() {
     const tableBody = document.getElementById('inventoryTableBody');

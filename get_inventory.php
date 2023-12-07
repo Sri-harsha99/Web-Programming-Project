@@ -22,7 +22,16 @@ if ($result->num_rows > 0) {
 
     // Fetch each row from the result and store it in $inventoryData array
     while ($row = $result->fetch_assoc()) {
-        $inventoryData[] = $row;
+        $formattedRow = array(
+            'name' => $row['Name'],
+            'type' => $row['Category'],
+            'category' => $row['Subcategory'],
+            'price' => $row['Unit_price'],
+            'inventory' => $row['Quantity_in_inventory'],
+            'image' => $row['Image'],
+            'id' => $row['Item_number']
+        );
+        $inventoryData[] = $formattedRow;
     }
 
     // Convert the $inventoryData array to JSON format
