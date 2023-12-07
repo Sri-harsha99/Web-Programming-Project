@@ -27,7 +27,7 @@ JOIN Carts ct ON ct.Transaction_ID = t.Transaction_ID
 JOIN Customers c ON c.Customer_ID = ct.Customer_ID
 WHERE t.Transaction_Date = ?
 GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
-HAVING COUNT(ct.Transaction_ID) > 2;";
+HAVING COUNT(ct.Transaction_ID) > 2";
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $formattedDate);

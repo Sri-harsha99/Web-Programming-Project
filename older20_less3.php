@@ -13,11 +13,12 @@ if ($conn->connect_error) {
 }
 
 $query = "SELECT c.Customer_ID, c.First_Name, c.Last_Name
-          FROM Customers c
-          JOIN Transactions t ON c.Customer_ID = t.Customer_ID
-          WHERE RIGHT(c.Date_of_birth, 4) < '2003'
-          GROUP BY c.Customer_ID
-          HAVING COUNT(t.Transaction_ID) > 3";
+FROM Transactions t
+JOIN Carts ct ON ct.Transaction_ID = t.Transaction_ID
+JOIN Customers c ON c.Customer_ID = ct.Customer_ID
+WHERE RIGHT(c.Dob, 4) < '2003'
+GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
+HAVING COUNT(ct.Transaction_ID) > 3";
 
 $result = $conn->query($query);
 
