@@ -119,6 +119,28 @@ async function getProducts() {
 
 await getProducts(); // No need for 'await' here, as 'getProducts' is not an asynchronous function now
 
+let acc = document.getElementById('account');
+if(acc){
+    const selectElement = document.getElementById('filterType');
+
+    selectElement.addEventListener('change', function() {
+        const selectedValue = selectElement.value;
+        
+        if(selectedValue === "month"){
+            monthIn = document.getElementById("monthFilter");
+            monthIn.style.display = 'block';
+        }
+        if(selectedValue === "year"){
+            monthIn = document.getElementById("yearFilter");
+            monthIn.style.display = 'block';
+        }
+        // You can perform additional actions based on the selected value
+    });
+
+    getTransactions();
+    displayTransactions();
+
+}
 
 categorySelector.addEventListener('change', function () {
     const selectedCategory = categorySelector.value;
@@ -168,13 +190,13 @@ categorySelector.addEventListener('change', function () {
 });
 
 });
-let cartProducts = [];
-let curr = localStorage.getItem("uniqueCart")
-if(curr){
-    cartProducts = JSON.parse(curr);
-}else{
-    cartProducts = [];
-}
+// let cartProducts = [];
+// let curr = localStorage.getItem("uniqueCart")
+// if(curr){
+//     cartProducts = JSON.parse(curr);
+// }else{
+//     cartProducts = [];
+// }
 
 function getCustomerID() {
     // Retrieve the 'user' object from localStorage
@@ -191,10 +213,38 @@ function getCustomerID() {
 
 async function getCart() {
     try {
+        var xhr = new XMLHttpRequest();
+        formData = new FormData();
+
+
+        formData.append("customerID",user.Customer_ID)
+        
+        xhr.open('POST', 'get_cart_items.php', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+    
+                    let data = xhr.responseText.toString();
+    
+                    if(data.includes("Error")){
+                        alert("unsuccessful");
+                    }else{
+                        cartProducts = JSON.parse(data);
+                        displayCart(cartList);
+                    }
+                } else {
+                    console.error('An error occurred during the AJAX request.');
+                }
+            }
+        };
+        xhr.send(formData);
+
     } catch (error) {
         console.error('An error occurred during the fetch cart:', error);
     }
 }
+
 
 await getProducts();
 
@@ -229,7 +279,7 @@ function addProductsToPage(productList,filteredProducts) {
     
             addToCartButton.addEventListener("click", () => {
 
-                if(qty.value>product.inventory){
+                if(qty.value>Number(product.inventory)){
                     alert(`Not enough inventory`);
                     return;
                 }
@@ -260,7 +310,7 @@ function displayCart(cartList){
         const listItem = document.createElement("div");
 
         const productInfo = document.createElement("div");
-        productInfo.textContent = `${product.name} - $${product.price} - ${product.qty} - $${product.total}`;
+        productInfo.textContent = `${product.Item_number} - ${product.Name} - $${product.Unit_price} - ${product.Quantity} - $${Number(product.Quantity)*Number(product.Unit_price)}`;
         total += parseInt(product.total);
 
         listItem.appendChild(productInfo);
@@ -269,7 +319,8 @@ function displayCart(cartList){
     });
     const listItem = document.createElement("div");
     const productInfo = document.createElement("div");
-    productInfo.textContent = `Total --------------------------- $${total}`;
+    if(cartProducts.length > 0)
+        productInfo.textContent = `Total --------------------------- $${cartProducts[0]['Total_Price']}`;
     listItem.appendChild(productInfo);
     cartList.appendChild(listItem);
 }
@@ -386,6 +437,31 @@ function addToCart(product,qty){
 
     // updateXMLData(products);
     // updateJSONData(products);
+    var xhr = new XMLHttpRequest();
+    formData = new FormData();
+    formData.append("itemNumber",product.id)
+    formData.append("quantity",qty)
+    formData.append("customerID",user.Customer_ID)
+    
+    xhr.open('POST', 'add_to_cart.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+
+                let data = xhr.responseText.toString();
+
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }else{
+                    getCart();
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
 }
 
 const cartButtons = document.getElementById("cartButtons");
@@ -393,19 +469,19 @@ const cartButtons = document.getElementById("cartButtons");
 var button1 = document.getElementById("remove");
 var button2 = document.getElementById("buy");
 
-button1.addEventListener("click", function (e) {
-        products.forEach((product) =>{
-            cartProducts.forEach((prod) => {
-                if (product.name == prod.name){
-                    product.inventory = (Number(product.inventory)+Number(prod.qty));              
-                }
-            });
-        })
+button1.addEventListener("click", async function (e) {
+        // products.forEach((product) =>{
+        //     cartProducts.forEach((prod) => {
+        //         if (product.name == prod.name){
+        //             product.inventory = (Number(product.inventory)+Number(prod.qty));              
+        //         }
+        //     });
+        // })
 
-        cartProducts = [];
-        localStorage.setItem('uniqueCart', JSON.stringify(cartProducts));
-        const productList = document.getElementById("cart-products");
-        displayCart(productList);
+        // cartProducts = [];
+        // localStorage.setItem('uniqueCart', JSON.stringify(cartProducts));
+        // const productList = document.getElementById("cart-products");
+        // displayCart(productList);
 
         // async function updateXMLData(products) {
         //     try {
@@ -445,15 +521,65 @@ button1.addEventListener("click", function (e) {
 
     // updateJSONData(products);
     // updateXMLData(products);
+    
+    var xhr = new XMLHttpRequest();
+    formData = new FormData();
+    formData.append("transactionId",cartProducts[0].Transaction_ID)
+    
+    xhr.open('POST', 'cancel_shopping.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
 
+                let data = xhr.responseText.toString();
 
-
-    updateInventory(products);
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
+    await getProducts();
+    cartProducts = [];
+    const productList = document.getElementById("cart-products");
+    displayCart(productList);
 })
 
-button2.addEventListener("click", function(e){
+button2.addEventListener("click", async function(e){
+    // cartProducts = [];
+    // localStorage.setItem('uniqueCart', JSON.stringify(cartProducts));
+    // const productList = document.getElementById("cart-products");
+    // displayCart(productList);
+
+    var xhr = new XMLHttpRequest();
+    formData = new FormData();
+    formData.append("transactionId",cartProducts[0].Transaction_ID)
+    
+    xhr.open('POST', 'buy.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+
+                let data = xhr.responseText.toString();
+
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }else{
+                    alert('Shopped')
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
+    await getProducts();
     cartProducts = [];
-    localStorage.setItem('uniqueCart', JSON.stringify(cartProducts));
     const productList = document.getElementById("cart-products");
     displayCart(productList);
 
@@ -464,8 +590,10 @@ const productList = document.getElementById("products-list");
 addProductsToPage(productList);
 
 const cartList = document.getElementById("cart-products");
-if(cartList)
-    displayCart(cartList);
+if(cartList){
+    await getCart();
+}
+    
 
 function hasNumbers(inputString) {
     const regex = /\d/;
@@ -640,6 +768,8 @@ function updateTime() {
 }
 
 
+
+
 function triggerFileInput(inputId) {
     const fileInput = document.getElementById(inputId);
     fileInput.click();
@@ -749,25 +879,48 @@ function readXMLFile() {
     }
 
 }
+function getCustomerID() {
+    // Retrieve the 'user' object from localStorage
+    const userJson = localStorage.getItem('user');
+    
+    // Parse the JSON string to an object
+    const userObj = JSON.parse(userJson);
+    
+    // Access the 'Customer_ID' property of the 'user' object
+    const customerID = userObj.user.Customer_ID;
+    
+    return customerID;
+}
 
-const transactions = [
-    {
-        id: 1,
-        status: "shipped",
-        items: [
-            { id: 101, name: "Product A", quantity: 2 },
-            { id: 102, name: "Product B", quantity: 1 }
-        ]
-    },
-    {
-        id: 2,
-        status: "not shipped",
-        items: [
-            { id: 103, name: "Product C", quantity: 3 },
-            { id: 104, name: "Product D", quantity: 1 }
-        ]
-    },
-    // Add more transactions as needed
+function getTransactions(){
+    var xhr = new XMLHttpRequest();
+    formData = new FormData();
+
+    formData.append("customerID",getCustomerID())
+    
+    xhr.open('POST', 'get_transactions.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+
+                let data = xhr.responseText.toString();
+
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }else{
+                    transactions = JSON.parse(data);
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
+}
+
+
+let transactions = [
 ];
 
 function displayTransactions() {
@@ -777,31 +930,44 @@ function displayTransactions() {
     transactions.forEach(transaction => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${transaction.id}</td>
-            <td>${transaction.status}</td>
-            <td>${transaction.items.map(item => `${item.name} (Qty: ${item.quantity})`).join(', ')}</td>
-            <td>${transaction.status === 'not shipped' ? `<button onclick="cancelTransaction(${transaction.id})">Cancel</button>` : ''}</td>
+            <td>${transaction.Transaction_ID}</td>
+            <td>${transaction.Transaction_Status}</td>
+            <td>${transaction.Name}</td>
+            <td>${transaction.Transaction_Status === 'in cart' ? `<button onclick="cancelTransaction(${transaction.Transaction_ID})">Cancel</button>` : ''}</td>
         `;
         tableBody.appendChild(row);
     });
 }
 
-function cancelTransaction(transactionId) {
+async function cancelTransaction(transactionId) {
     const transactionIndex = transactions.findIndex(transaction => transaction.id === transactionId);
+    var xhr = new XMLHttpRequest();
+    formData = new FormData();
+    formData.append("transactionId",cartProducts[0].Transaction_ID)
+    
+    xhr.open('POST', 'cancel_shopping.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
 
-    if (transactionIndex !== -1) {
-        const canceledTransaction = transactions.splice(transactionIndex, 1)[0];
-        console.log(`Transaction ${canceledTransaction.id} canceled.`);
+                let data = xhr.responseText.toString();
 
-        // Update inventory (example: increase quantities)
-        canceledTransaction.items.forEach(item => {
-            // Your inventory update logic here
-            console.log(`Inventory updated for ${item.name}: Quantity increased by ${item.quantity}`);
-        });
+                if(data.includes("Error")){
+                    alert("Registration unsuccessful");
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
+    await getProducts();
+    cartProducts = [];
+    const productList = document.getElementById("cart-products");
+    displayCart(productList);
 
-        // Refresh the displayed transactions after cancelation
-        displayTransactions();
-    }
+    await getTransactions();
 }
 
 function filterTransactions() {
@@ -809,15 +975,43 @@ function filterTransactions() {
     const monthFilter = document.getElementById('monthFilter').value;
     const yearFilter = document.getElementById('yearFilter').value;
 
-    let filteredTransactions = [...transactions];
+    // let filteredTransactions = [...transactions];
 
     switch (filterType) {
         case 'month':
-            filteredTransactions = transactions.filter(transaction => {
-                // Assuming date information is available in each transaction
-                const transactionMonth = new Date(transaction.date).getMonth() + 1; // Months are 0-based
-                return transactionMonth.toString() === monthFilter;
-            });
+            // filteredTransactions = transactions.filter(transaction => {
+            //     // Assuming date information is available in each transaction
+            //     const transactionMonth = new Date(transaction.date).getMonth() + 1; // Months are 0-based
+            //     return transactionMonth.toString() === monthFilter;
+            // });
+
+
+            var xhr = new XMLHttpRequest();
+            formData = new FormData();
+            formData.append("transactionId",cartProducts[0].Transaction_ID)
+            formData.append("month",monthFilter)
+            
+            xhr.open('POST', 'get_transactions_specific_month.php', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+        
+                        let data = xhr.responseText.toString();
+        
+                        if(data.includes("Error")){
+                            alert("Registration unsuccessful");
+                        }else{
+                            transactions = JSON.parse(data)
+                            displayTransactions();
+                        }
+                    } else {
+                        console.error('An error occurred during the AJAX request.');
+                    }
+                }
+            };
+            xhr.send(formData);
+
             break;
         case 'last3months':
             const currentDate = new Date();
@@ -829,11 +1023,32 @@ function filterTransactions() {
             });
             break;
         case 'year':
-            filteredTransactions = transactions.filter(transaction => {
-                // Assuming date information is available in each transaction
-                const transactionYear = new Date(transaction.date).getFullYear();
-                return transactionYear.toString() === yearFilter;
-            });
+            
+        var xhr = new XMLHttpRequest();
+        formData = new FormData();
+        formData.append("transactionId",cartProducts[0].Transaction_ID)
+        formData.append("year",monthFilter)
+        
+        xhr.open('POST', 'get_transactions_specific_year.php', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+    
+                    let data = xhr.responseText.toString();
+    
+                    if(data.includes("Error")){
+                        alert("Registration unsuccessful");
+                    }else{
+                        transactions = JSON.parse(data)
+                        displayTransactions();
+                    }
+                } else {
+                    console.error('An error occurred during the AJAX request.');
+                }
+            }
+        };
+        xhr.send(formData);
             break;
     }
 
@@ -842,10 +1057,7 @@ function filterTransactions() {
 }
 
 // Initial display of transactions
-let acc = document.getElementById('account');
-if(acc){
-    displayTransactions();
-}
+
 
 
 function displayInventory() {
@@ -994,4 +1206,9 @@ async function modifyInventory(){
         }
     };
     xhr.send(formData);
+}
+
+function logout(){
+    localStorage.removeItem('user');
+    window.location.href('http://localhost/wpl/index.html');
 }
