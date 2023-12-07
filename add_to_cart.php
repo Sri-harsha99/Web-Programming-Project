@@ -73,12 +73,32 @@ $updateInventoryStmt->execute();
 $stmt->execute();
 
 if ($stmt->affected_rows > 0) {
-    echo "Item added to cart successfully!";
+    $totalPriceQuery = "SELECT SUM(i.Unit_price * c.Quantity) AS Total_Price
+                        FROM Carts c
+                        JOIN Inventory i ON c.Item_number = i.Item_number
+                        WHERE c.Transaction_ID = ? AND c.Cart_status = 'in cart'";
+    $totalPriceStmt = $conn->prepare($totalPriceQuery);
+    $totalPriceStmt->bind_param("i", $transactionId);
+    $totalPriceStmt->execute();
+    $totalPriceResult = $totalPriceStmt->get_result();
+    $totalPriceRow = $totalPriceResult->fetch_assoc();
+    $newTotalPrice = $totalPriceRow['Total_Price'];
+
+    // Update the total price in the Transactions table
+    $updateTotalPriceQuery = "UPDATE Transactions SET Total_Price = ? WHERE Transaction_ID = ?";
+    $updateTotalPriceStmt = $conn->prepare($updateTotalPriceQuery);
+    $updateTotalPriceStmt->bind_param("di", $newTotalPrice, $transactionId);
+    $updateTotalPriceStmt->execute();
+
+    echo "Item added to cart successfully! New total price: " . $newTotalPrice;
+
 } else {
     echo "Failed to add item to cart.";
 }
 
 $updateInventoryStmt->close();
+$totalPriceStmt->close();
+$updateTotalPriceStmt->close();
 $stmt->close();
 $conn->close();
 ?>
