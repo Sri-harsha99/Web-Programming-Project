@@ -13,6 +13,7 @@ if ($conn->connect_error) {
 }
 
 $date = $_POST['date'];
+// echo "hello";
 
 // Create a DateTime object from the original date string
 $dateObject = DateTime::createFromFormat('m/d/Y', $date);

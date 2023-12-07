@@ -1123,16 +1123,18 @@ function displayLowInventory() {
 }
 
 function date2Customers() {
-    date = document.getElementById('formDate');
+    date = document.getElementById('formDate2');
+
     formData = new FormData()
     formData.append('date',date);
+    var xhr = new XMLHttpRequest();
     xhr.open('POST', 'get_customers_by_date.php', true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
 
                 let temp = JSON.parse(xhr.responseText);
-                const tableBody = document.getElementById('customerTableBody');
+                const tableBody = document.getElementById('transTableBody');
                 tableBody.innerHTML = '';
                 
                 temp.forEach(each => {
@@ -1158,12 +1160,12 @@ function date2Customers() {
 }
 
 function zip2Customers() {
-    xhr.open('POST', 'get_inventory.php', true);
     pincode = document.getElementById('pincode');
     month = document.getElementById('month');
     formData = new FormData()
     formData.append('pincode',pincode);
     formData.append('month',month);
+    var xhr = new XMLHttpRequest();
     xhr.open('POST', 'get_customers_by_zip_and_month.php', true);
 
     xhr.onreadystatechange = function () {
