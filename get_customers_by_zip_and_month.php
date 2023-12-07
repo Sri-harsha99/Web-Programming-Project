@@ -16,11 +16,12 @@ $zipCode = $_POST['zipCode'];
 $month = $_POST['month']; // Assuming this is a string like 'Ja' for January
 
 $query = "SELECT c.Customer_ID, c.First_Name, c.Last_Name
-          FROM Customers c
-          JOIN Transactions t ON c.Customer_ID = t.Customer_ID
-          WHERE c.Address LIKE ? AND SUBSTRING(t.Transaction_Date, 6, 2) = ?
-          GROUP BY c.Customer_ID
-          HAVING COUNT(t.Transaction_ID) > 2";
+FROM Transactions t
+JOIN Carts ct ON ct.Transaction_ID = t.Transaction_ID
+JOIN Customers c ON c.Customer_ID = ct.Customer_ID
+WHERE c.Address LIKE ? AND SUBSTRING(t.Transaction_Date, 6, 2) = ?
+GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
+HAVING COUNT(ct.Transaction_ID) > 2";
 
 $stmt = $conn->prepare($query);
 $zipCodePattern = "%$zipCode%";

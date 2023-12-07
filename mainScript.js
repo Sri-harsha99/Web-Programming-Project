@@ -1127,7 +1127,6 @@ function date2Customers() {
 
     formData = new FormData()
     formData.append('date',date);
-    formData.append('date',date);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'get_customers_by_date.php', true);
     xhr.onreadystatechange = function () {
@@ -1141,16 +1140,16 @@ function date2Customers() {
                 temp.forEach(each => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${each.id}</td>
-                        <td>${each.name}</td>
+                        <td>${each.Customer_ID}</td>
+                        <td>${each.First_Name + each.Last_Name}</td>
                     `;
                     tableBody.appendChild(row);
                 });
 
-                if(data.includes("Error")){
+                if(temp.includes("Error")){
                     alert("Registration unsuccessful");
                 }else{
-                    console.log(data)
+                    console.log(temp)
                 }
             } else {
                 console.error('An error occurred during the AJAX request.');
@@ -1174,22 +1173,22 @@ function zip2Customers() {
             if (xhr.status === 200) {
 
                 let temp = JSON.parse(xhr.responseText);
-                const tableBody = document.getElementById('customerTableBody');
+                const tableBody = document.getElementById('transTableBody');
                 tableBody.innerHTML = '';
                 
                 temp.forEach(each => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${each.id}</td>
-                        <td>${each.name}</td>
+                        <td>${each.Customer_ID}</td>
+                        <td>${each.First_Name + each.Last_Name}</td>
                     `;
                     tableBody.appendChild(row);
                 });
 
-                if(data.includes("Error")){
+                if(temp.includes("Error")){
                     alert("Registration unsuccessful");
                 }else{
-                    console.log(data)
+                    console.log(temp)
                 }
             } else {
                 console.error('An error occurred during the AJAX request.');
@@ -1199,6 +1198,40 @@ function zip2Customers() {
     xhr.send(formData);
 }
 
+function olderCustomers() {
+    formData = new FormData()
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'older20_less3.php', true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+
+                let temp = JSON.parse(xhr.responseText);
+                const tableBody = document.getElementById('transTableBody');
+                tableBody.innerHTML = '';
+                
+                temp.forEach(each => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${each.Customer_ID}</td>
+                        <td>${each.First_Name + each.Last_Name}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                if(temp.includes("Error")){
+                    alert("Registration unsuccessful");
+                }else{
+                    console.log(temp)
+                }
+            } else {
+                console.error('An error occurred during the AJAX request.');
+            }
+        }
+    };
+    xhr.send(formData);
+}
 
 let inventoryTable = document.getElementById('inventoryTableBody');
 
