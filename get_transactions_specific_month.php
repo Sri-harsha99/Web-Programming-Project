@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 $customerID = $_POST['customerID']; // Retrieve the customer ID from the session
 $monthid = $_POST['month'];
 
-echo $customerID. $monthid;
+// echo $customerID. $monthid;
 
 // Transactions for the months of December, November, and October
 $query = "SELECT t.Transaction_ID, t.Transaction_Status, t.Transaction_Date, t.Total_Price, 
