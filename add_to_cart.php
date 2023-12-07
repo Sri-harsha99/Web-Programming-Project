@@ -41,7 +41,7 @@ if ($result->num_rows > 0) {
     $temp = 0;
     $query = "INSERT INTO Carts (Customer_ID, Transaction_ID, Item_number, Quantity, Cart_status) VALUES (?, ?, ?, 'in cart')";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("iii", $customerID, $transactionId, $itemNumber, $temp);
+    $stmt->bind_param("iiii", $customerID, $transactionId, $itemNumber, $temp);
     $stmt->execute();
 }
 
