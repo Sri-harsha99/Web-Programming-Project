@@ -23,7 +23,7 @@ $query = "SELECT t.Transaction_ID, t.Transaction_Status, t.Transaction_Date, t.T
           JOIN Carts c ON t.Transaction_ID = c.Transaction_ID
           JOIN Inventory i ON c.Item_number = i.Item_number
           WHERE c.Customer_ID = ? AND 
-                (SUBSTRING(t.Transaction_Date, 1, 2) = ?)";
+                (SUBSTRING(t.Transaction_Date, 6, 2) = ?)";
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("is", $customerID, $monthid);
